@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, request, flash, redirect, session, g
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension # will just decide to throw an error so I've gotten rid of debug_toolbar
 from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm, MessageForm
@@ -20,7 +20,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-toolbar = DebugToolbarExtension(app)
+# toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
@@ -51,6 +51,10 @@ def do_logout():
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
+        return True
+    
+    return False
+    
 
 
 @app.route('/signup', methods=["GET", "POST"])
@@ -112,6 +116,11 @@ def login():
 @app.route('/logout')
 def logout():
     """Handle logout of user."""
+    if do_logout():
+        flash(f"Successfully logged out.", "success")
+        return redirect('/login')
+
+    return redirect('/')
 
     # IMPLEMENT THIS
 
