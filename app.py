@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 # from flask_debugtoolbar import DebugToolbarExtension # will just decide to throw an error so I've gotten rid of debug_toolbar
 from sqlalchemy.exc import IntegrityError
 
-from forms import UserAddForm, LoginForm, MessageForm
+from forms import UserAddForm, LoginForm, MessageForm, ProfileEditForm
 from models import db, connect_db, User, Message
 
 CURR_USER_KEY = "curr_user"
@@ -24,6 +24,12 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 
 connect_db(app)
 
+"""My quick debugger method"""
+def flask_debugger_text(*messages):
+    print('-'*50)
+    for msg in messages:
+        print(msg)
+    print('-'*50)
 
 ##############################################################################
 # User signup/login/logout
@@ -219,8 +225,39 @@ def stop_following(follow_id):
 @app.route('/users/profile', methods=["GET", "POST"])
 def profile():
     """Update profile for current user."""
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+    form = ProfileEditForm()
 
-    # IMPLEMENT THIS
+    if form.validate_on_submit():
+
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        password = form.password.data
+        image_url= form.image_url.data
+        header_image_url = form.header_image_url.data
+        bio = form.bio.data
+
+        if g.user.authenticate(g.user.username, password):
+            if username != "":
+                g.user.username = username
+            if email != "":
+                g.user.email = email
+            if image_url != "":
+                g.user.image_url = image_url 
+            if header_image_url != "":
+                g.user.header_image_url = header_image_url 
+            if bio != "":
+                g.user.bio = bio 
+
+            flash('Profile Updated', 'success')
+            db.session.commit()
+            return redirect(f'/users/{g.user.id}')
+    
+    return render_template('users/edit.html', form=form)
 
 
 @app.route('/users/delete', methods=["POST"])
