@@ -257,7 +257,7 @@ def profile():
             db.session.commit()
             return redirect(f'/users/{g.user.id}')
     
-    return render_template('users/edit.html', form=form)
+    return render_template('users/edit.html', form=form, user_id=g.user.id)
 
 
 @app.route('/users/delete', methods=["POST"])
@@ -338,11 +338,16 @@ def homepage():
     """
 
     if g.user:
-        messages = (Message
-                    .query
-                    .order_by(Message.timestamp.desc())
-                    .limit(100)
-                    .all())
+        following_users = [user for user in g.user.following] # current users messages from people they're following
+        flask_debugger_text(following_users)
+        messages = []
+        for user in following_users:
+            messages += Message.query.filter_by(user_id=user.id).order_by(Message.timestamp.desc()).limit(100).all()
+        # messages = (Message
+        #             .query
+        #             .order_by(Message.timestamp.desc())
+        #             .limit(100)
+        #             .all())
 
         return render_template('home.html', messages=messages)
 

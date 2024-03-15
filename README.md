@@ -30,11 +30,15 @@
     - [x] It should check that that password is the valid password for the user -- if not, it should flash an error and return to the homepage.
     - [x] It should edit the user for all of these fields *except* password (i.e. this is not an area where users can change their passwords-the password is only for checking if it is the current correct password.)
     - [x] On success, it should redirect to the user detail page.
-- [ ] **Step Six: Fix Homepage**
-    The homepage for logged-in-users should show the last 100 warbles **only from the users that the logged-in user is following, and that user**, rather than warbles from *all* users.
-- [ ] **Step Seven: Research and Understand Login Strategy**
+- [x] **Step Six: Fix Homepage**
+    - [x] The homepage for logged-in-users should show the last 100 warbles **only from the users that the logged-in user is following, and that user**, rather than warbles from *all* users.
+- [x] **Step Seven: Research and Understand Login Strategy**
     Look over the code in *app.py* related to authentication.
-    - [ ] How is the logged in user being kept track of?
-    - [ ] What is Flask's ***g*** object?
-    - [ ] What is the purpose of ***add_user_to_g***?
-    - [ ] What does ***@app.before_request*** mean?
+    - [x] How is the logged in user being kept track of?
+        The user is being kept track of using flasks *g* object.
+    - [x] What is Flask's ***g*** object?
+        Flask's ***g*** object is a global namespace that allows you to hold any type of data that could be relevant to your apps context. For this instance this would be the current user object that is logged in.
+    - [x] What is the purpose of ***add_user_to_g***?
+        The purpose of ***add_user_to_g*** is to make it so that the current user that is logged in can be accessible through ***g*** which makes writing code for user doesn't have to start off with a query everytime I need access to the current user in the db.
+    - [x] What does ***@app.before_request*** mean?
+        ***@app.before_request*** runs before every request to another site on that webpage. For this instance it's used to check and see if the user is still logged in after each page and if not then the user is redirected to `/`
