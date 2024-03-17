@@ -48,6 +48,9 @@ class Likes(db.Model):
         unique=True
     )
 
+    def __repr__(self):
+        return f"< Likes id={self.id} user_id={self.user_id} message_id={self.message_id} >"
+
 
 class User(db.Model):
     """User in the system."""
@@ -129,6 +132,10 @@ class User(db.Model):
 
         found_user_list = [user for user in self.following if user == other_user]
         return len(found_user_list) == 1
+    
+    def count_likes(self):
+        """ counts the number of posts user has liked """
+        return len(self.likes)
 
     @classmethod
     def signup(cls, username, email, password, image_url):
@@ -198,6 +205,10 @@ class Message(db.Model):
     )
 
     user = db.relationship('User')
+
+    def __repr__(self):
+        m = self
+        return f"< id={m.id} text={m.text} timestamp={m.timestamp} user_id={m.user_id} user={m.user} >"
 
 
 def connect_db(app):

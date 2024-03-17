@@ -42,3 +42,35 @@
         The purpose of ***add_user_to_g*** is to make it so that the current user that is logged in can be accessible through ***g*** which makes writing code for user doesn't have to start off with a query everytime I need access to the current user in the db.
     - [x] What does ***@app.before_request*** mean?
         ***@app.before_request*** runs before every request to another site on that webpage. For this instance it's used to check and see if the user is still logged in after each page and if not then the user is redirected to `/`
+#### Part 2: Add Likes
+**Do this without AJAX/JavaScript**
+
+Eventually, this would be a fine feature to integrate with JS/AJAX - that's even a further study possibility!
+
+For now, though: please build this as a pure backend feature in Flask. Liking a warble should NOT be done via AJAX right now.
+
+- [x] Add a new feature that allows a user to "like" a warble. They should only be able to like warbles written by other users. They should put a star (or some other similar symbol) next to like warbles.
+
+- [x] They should be able to unlike a warble, by clicking on that star
+
+- [x] On a profile page, it should show how many warblers that user has like, and this should link to a page showing their liked warbles.
+
+#### Part 3: Add Tests
+Add tests. You'll need to proceed carefully here, since testing things like logging in and logging out will need to be tested using the session object.
+
+Let's discuss a couple of things related to tests: *how* you should test, and *what* you should test. We created some *(mostly empty)* test files:
+
+- **test_user_model.py**
+- **test_user_views.py**
+- **test_message_model.py**
+- **test_message_views.py**
+
+In this case, there are four test files: two for testing the models, and two for testing the routes/view-functions.
+
+We've put some boilerplate code into two of these to help you get started.
+
+To run a file containing unittests, you can run the command `FLASK_ENV=production python -m unittest <name-of-python-file>`.
+
+(We set ***FLASK_ENV*** for this command, so it doesn't use debug mode, and therefore won't use the debug toolbar during our tests).
+
+If you're having an error running tests (comment out the line in your app.py that uses the debug toolbar)
